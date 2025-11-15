@@ -53,8 +53,8 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/${{ vars.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIF_POOL_ID }}/providers/${{ secrets.WIF_PROVIDER_ID }}'
-          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+          workload_identity_provider: 'projects/${{ vars.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ vars.WIF_POOL_ID }}/providers/${{ vars.WIF_PROVIDER_ID }}'
+          service_account: '${{ vars.GCP_SERVICE_ACCOUNT }}'
           create_credentials_file: true
           project_id: ${{ vars.CICD_PROJECT_ID }}
       - name: Install uv and dependencies
