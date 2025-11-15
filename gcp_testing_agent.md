@@ -4,6 +4,14 @@ This repository contains the `gcp-testing-agent`, a production-grade, AI-powered
 
 This agent acts as the intelligent "brain" in an autonomous software development lifecycle (SDLC). It receives natural language testing instructions from a higher-level agent (like a GitHub-based "Test Organizer"), executes those instructions by interacting with live Google Cloud services, and reports back a definitive `PASSED` or `FAILED` status.
 
+The current specialization focuses on AISports cloud functions. The agent:
+
+- Publishes canonical scraper requests to the `scraping-requests` topic, triggering the same code path as `scraper_function/trigger_test_tr.py`.
+- Reads intermediate artifacts in `news_data/` and `batch_processing/` buckets (batch requests, raw Vertex outputs, merged summaries).
+- Queries Cloud Logging for each Cloud Function involved, surfacing errors and correlating timestamps with the GitHub task.
+- Verifies deployments via the Cloud Functions API to ensure new revisions are active before marking a change as passed.
+- Applies newsroom prioritization rules (fights → derbies → scandals → transfers → press conferences, football before basketball) when validating the `result_merger_function` output.
+
 ---
 
 ## 🚀 Features
@@ -72,14 +80,16 @@ This project was generated from the `adk_base` template of the `agent-starter-pa
 2.  **Define the Agent (`src/agent.py`)**:
     The core agent logic, instruction prompt, and tool registration are defined in `src/agent.py`.
 
-3.  **Implement Tools (`src/tools/`)**:
+3.  **Implement Tools (`app/tools/`)**:
     Tools are standard Python functions decorated with `@tool` from the ADK. Each tool should have a clear purpose, a descriptive docstring (which the agent uses for reasoning), and strong type hints.
 
-    *   **`gcs_tools.py`**: Contains tools for interacting with Google Cloud Storage.
-    *   **`logging_tools.py`**: Contains tools for querying Cloud Logging.
+    *   **`pubsub_tools.py`**: Publishes the canonical scraper request that kicks off the AISports pipeline.
+    *   **`gcs_tools.py`**: Lists and reads artifacts across `news_data/`, `batch_processing/`, `batch_results_raw/`, and `batch_results_merged/`.
+    *   **`logging_tools.py`**: Queries Cloud Logging for Cloud Function invocations.
+    *   **`deployment_tools.py`**: Uses the Cloud Functions API to inspect deployment metadata (runtime, update timestamp, service account, concurrency limits).
 
 4.  **Local Testing**:
-    You can run the agent locally for rapid development and testing.
+    You can run the agent locally for rapid development and testing. When prompting locally, include a natural-language test brief similar to what the GitHub Test Organizer would send so the agent can produce the required `Test Plan → Execution → Evidence → Issues → Verdict` structure.
     ```bash
     # Run the local development server
     make run

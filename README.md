@@ -66,6 +66,27 @@ This template follows a "bring your own agent" approach - you focus on your busi
 
 The project includes a `GEMINI.md` file that provides context for AI tools like Gemini CLI when asking questions about your template.
 
+## AISports Testing Workflow
+
+The current implementation specializes the generic template into an end-to-end tester for the AISports news pipeline. The agent now:
+
+- Receives natural-language test briefs from the GitHub-based Test Organizer through an MCP bridge.
+- Publishes canonical scraping requests via Pub/Sub to trigger `scraper_function`, then follows the downstream `batch_builder_function` and `result_merger_function` outputs in `news_data/` and `batch_processing/` buckets.
+- Queries Cloud Logging for each Cloud Function invocation to ensure runs completed without unhandled exceptions.
+- Confirms deployments with the Cloud Functions API to verify that new revisions are live before validating functionality.
+- Applies newsroom priorities (fights → derbies → scandals → transfers → press conferences, football before basketball) when summarizing merged JSON produced by `result_merger_function` and any post-generation step.
+
+### Built-in Tools
+
+| Tool | Purpose |
+| ---- | ------- |
+| `trigger_scraper_pipeline` | Publish the standard scraper test payload to kick off the pipeline. |
+| `list_gcs_objects`, `read_gcs_object`, `read_gcs_jsonl_preview` | Inspect intermediate and final artifacts inside the AISports buckets. |
+| `query_function_logs` | Fetch recent Cloud Logging entries scoped to a specific Cloud Function. |
+| `describe_cloud_function` | Pull deployment metadata (update time, runtime, service account) for any Cloud Function the pipeline relies on. |
+
+Responses from the agent must follow the rigid structure documented in `app/agent.py`: summarize the plan, show execution evidence, raise issues if any tool fails, and close with `VERDICT: PASSED` or `VERDICT: FAILED`.
+
 
 ## Deployment
 
