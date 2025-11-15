@@ -62,7 +62,7 @@ class AgentEngineApp(AdkApp):
 
 
 _, project_id = google.auth.default()
-vertexai.init(project=project_id, location="2")
+vertexai.init(project=project_id, location=os.environ.get("VERTEX_AI_LOCATION"))
 artifacts_bucket_name = os.environ.get("ARTIFACTS_BUCKET_NAME")
 agent_engine = AgentEngineApp(
     app=adk_app,
