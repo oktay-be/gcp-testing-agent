@@ -72,7 +72,7 @@ jobs:
           cmd=(
             python
             -m app.app_utils.deploy
-            --project '${{ vars.PROD_PROJECT_ID }}'
+            --project '${{ vars.GCP_PROJECT_ID }}'
             --location '${{ vars.REGION }}'
             --source-packages ./app
             --entrypoint-module app.agent_engine_app
