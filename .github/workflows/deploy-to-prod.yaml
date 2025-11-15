@@ -57,6 +57,7 @@ jobs:
           service_account: '${{ vars.GCP_SERVICE_ACCOUNT }}'
           create_credentials_file: true
           project_id: ${{ vars.CICD_PROJECT_ID }}
+          debug_logging: true
       - name: Install uv and dependencies
         run: |
           pip install uv==0.8.13
