@@ -65,21 +65,12 @@ jobs:
       - name: Deploy to Production (Agent Engine)
         shell: bash
         run: |
-          set -euo pipefail
-
           uv export --no-hashes --no-sources --no-header --no-dev --no-emit-project --no-annotate --locked > app/app_utils/.requirements.txt
-
-          cmd=(
-            python
-            -m app.app_utils.deploy
-            --project '${{ vars.GCP_PROJECT_ID }}'
-            --location '${{ vars.REGION }}'
-            --source-packages ./app
-            --entrypoint-module app.agent_engine_app
-            --entrypoint-object agent_engine
-            --requirements-file app/app_utils/.requirements.txt
-            --set-env-vars "COMMIT_SHA=${{ github.sha }},ARTIFACTS_BUCKET_NAME=${{ vars.LOGS_BUCKET_NAME_PROD }}"
-          )
-
-          uv run "${cmd[@]}"
-
+          uv run python -m app.app_utils.deploy \
+            --project ${{ vars.GCP_PROJECT_ID }} \
+            --location ${{ vars.REGION }} \
+            --source-packages=./app \
+            --entrypoint-module=app.agent_engine_app \
+            --entrypoint-object=agent_engine \
+            --requirements-file=app/app_utils/.requirements.txt \
+            --set-env-vars="COMMIT_SHA=${{ github.sha }},ARTIFACTS_BUCKET_NAME=${{ vars.LOGS_BUCKET_NAME_PROD }}"
