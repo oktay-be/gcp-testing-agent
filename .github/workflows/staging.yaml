@@ -15,15 +15,16 @@
 name: Deploy to Staging
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'app/**'
-      - 'data_ingestion/**'
-      - 'tests/**'
-      - 'deployment/**'
-      - 'uv.lock'
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'app/**'
+  #     - 'data_ingestion/**'
+  #     - 'tests/**'
+  #     - 'deployment/**'
+  #     - 'uv.lock'
 
 jobs:
   deploy_and_test_staging:
