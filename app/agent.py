@@ -20,7 +20,6 @@ from typing import Any
 import google.auth
 from google.adk.agents import Agent
 from google.adk.apps.app import App
-from google.adk.tools import tool
 from google.cloud import functions_v2
 from google.cloud import logging_v2
 from google.cloud import pubsub_v1
@@ -73,7 +72,6 @@ def _default_payload(keywords: list[str] | None, urls: list[str] | None) -> dict
   }
 
 
-@tool
 def list_gcs_objects(bucket_name: str, prefix: str = "", limit: int = 20) -> list[dict[str, Any]]:
   """List recent objects under a prefix."""
 
@@ -97,7 +95,6 @@ def list_gcs_objects(bucket_name: str, prefix: str = "", limit: int = 20) -> lis
   return results
 
 
-@tool
 def read_gcs_object(bucket_name: str, object_path: str) -> str:
   """Return the raw text content of a GCS object."""
 
@@ -109,7 +106,6 @@ def read_gcs_object(bucket_name: str, object_path: str) -> str:
   return blob.download_as_text()
 
 
-@tool
 def read_gcs_jsonl_preview(bucket_name: str, object_path: str, max_lines: int = 10) -> list[dict[str, Any]]:
   """Return the first N JSONL rows to keep responses small."""
 
@@ -127,7 +123,6 @@ def read_gcs_jsonl_preview(bucket_name: str, object_path: str, max_lines: int = 
   return preview
 
 
-@tool
 def query_function_logs(
   function_name: str,
   minutes: int = 60,
@@ -164,7 +159,6 @@ def query_function_logs(
   return results
 
 
-@tool
 def trigger_scraper_pipeline(
   topic_name: str | None = None,
   keywords: list[str] | None = None,
@@ -188,7 +182,6 @@ def trigger_scraper_pipeline(
   return message_id
 
 
-@tool
 def describe_cloud_function(
   function_name: str,
   location: str | None = None,
