@@ -15,7 +15,7 @@
 import datetime as dt
 import json
 import os
-from typing import Any
+from typing import Any, Optional
 
 import google.auth
 from google.adk.agents import Agent
@@ -43,7 +43,7 @@ def _get_default_region() -> str:
   return os.environ.get("REGION") or os.environ.get("VERTEX_AI_LOCATION", "us-central1")
 
 
-def _normalize_bucket_and_blob(bucket_name: str, blob_path: str | None = None) -> tuple[str, str | None]:
+def _normalize_bucket_and_blob(bucket_name: str, blob_path: Optional[str] = None) -> tuple[str, Optional[str]]:
   normalized_bucket = bucket_name[5:] if bucket_name.startswith("gs://") else bucket_name
   if blob_path and blob_path.startswith("gs://"):
     path_without_scheme = blob_path[5:]
@@ -56,7 +56,7 @@ def _get_storage_client() -> storage.Client:
   return storage.Client(project=_get_project_id())
 
 
-def _default_payload(keywords: list[str] | None, urls: list[str] | None) -> dict[str, Any]:
+def _default_payload(keywords: Optional[list[str]], urls: Optional[list[str]]) -> dict[str, Any]:
   return {
     "keywords": keywords
     or ["fenerbahce", "galatasaray", "mourinho", "transfer", "derbi"],
@@ -126,7 +126,7 @@ def read_gcs_jsonl_preview(bucket_name: str, object_path: str, max_lines: int = 
 def query_function_logs(
   function_name: str,
   minutes: int = 60,
-  severity: str | None = None,
+  severity: Optional[str] = None,
   limit: int = 50,
 ) -> list[dict[str, Any]]:
   """Fetch recent log entries for a Cloud Function."""
@@ -160,9 +160,9 @@ def query_function_logs(
 
 
 def trigger_scraper_pipeline(
-  topic_name: str | None = None,
-  keywords: list[str] | None = None,
-  urls: list[str] | None = None,
+  topic_name: Optional[str] = None,
+  keywords: Optional[list[str]] = None,
+  urls: Optional[list[str]] = None,
   scrape_depth: int = 1,
   persist: bool = False,
 ) -> str:
@@ -173,7 +173,7 @@ def trigger_scraper_pipeline(
 
 def describe_cloud_function(
   function_name: str,
-  location: str | None = None,
+  location: Optional[str] = None,
 ) -> dict[str, Any]:
   """Return human-friendly metadata for a Cloud Function."""
 
