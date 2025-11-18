@@ -166,20 +166,9 @@ def trigger_scraper_pipeline(
   scrape_depth: int = 1,
   persist: bool = False,
 ) -> str:
-  """Publish a scraping request identical to trigger_test_tr.py."""
+  """Temporarily disabled so the agent cannot publish new scrape jobs."""
 
-  project_id = _get_project_id()
-  topic = topic_name or os.environ.get("SCRAPING_REQUESTS_TOPIC", "scraping-requests")
-  publisher = pubsub_v1.PublisherClient()
-  topic_path = publisher.topic_path(project_id, topic)
-
-  payload = _default_payload(keywords, urls)
-  payload["scrape_depth"] = scrape_depth
-  payload["persist"] = persist
-
-  future = publisher.publish(topic_path, json.dumps(payload).encode("utf-8"))
-  message_id = future.result()
-  return message_id
+  raise RuntimeError("trigger_scraper_pipeline is temporarily disabled")
 
 
 def describe_cloud_function(
