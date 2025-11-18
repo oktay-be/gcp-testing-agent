@@ -247,7 +247,6 @@ root_agent = Agent(
     description="Autonomous integration tester for the AISports news pipeline.",
     instruction=TESTING_AGENT_INSTRUCTION,
     tools=[
-        trigger_scraper_pipeline,
         list_gcs_objects,
         read_gcs_object,
         read_gcs_jsonl_preview,
