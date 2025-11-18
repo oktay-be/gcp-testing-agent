@@ -20,6 +20,7 @@ from typing import Any, Optional
 import google.auth
 from google.adk.agents import Agent
 from google.adk.apps.app import App
+from google.adk.tools import FunctionTool
 from google.cloud import functions_v2
 from google.cloud import logging_v2
 from google.cloud import pubsub_v1
@@ -242,17 +243,17 @@ Reporting cadence:
 """
 
 root_agent = Agent(
-    name="aisports_testing_agent",
-    model=os.environ.get("VERTEX_AI_MODEL", "gemini-2.5-pro"),
-    description="Autonomous integration tester for the AISports news pipeline.",
-    instruction=TESTING_AGENT_INSTRUCTION,
-    tools=[
-        list_gcs_objects,
-        read_gcs_object,
-        read_gcs_jsonl_preview,
-        query_function_logs,
-        describe_cloud_function,
-    ],
+  name="aisports_testing_agent",
+  model=os.environ.get("VERTEX_AI_MODEL", "gemini-2.5-pro"),
+  description="Autonomous integration tester for the AISports news pipeline.",
+  instruction=TESTING_AGENT_INSTRUCTION,
+  tools=[
+    FunctionTool(list_gcs_objects),
+    FunctionTool(read_gcs_object),
+    FunctionTool(read_gcs_jsonl_preview),
+    FunctionTool(query_function_logs),
+    FunctionTool(describe_cloud_function),
+  ],
 )
 
 app = App(root_agent=root_agent, name="app")
