@@ -75,4 +75,4 @@ jobs:
             --entrypoint-module=app.agent_engine_app \
             --entrypoint-object=agent_engine \
             --requirements-file=app/app_utils/.requirements.txt \
-            --set-env-vars="COMMIT_SHA=${{ github.sha }},ARTIFACTS_BUCKET_NAME=${{ vars.ARTIFACTS_BUCKET_NAME }}"
+            --set-env-vars="COMMIT_SHA=${{ github.sha }},ARTIFACTS_BUCKET_NAME=${{ vars.ARTIFACTS_BUCKET_NAME }},GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true,OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true"
